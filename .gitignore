@@ -39,3 +39,6 @@ hs_err_pid*
 .project
 .settings
 target
+
+######学习
+.springBeans
