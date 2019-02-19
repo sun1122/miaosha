@@ -41,29 +41,8 @@ public class LoginController {
 	@ResponseBody
 	public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
 		log.info(loginVo.toString());
-		// 登录
-//		String mobile = loginVo.getMobile();
-//		String password = loginVo.getPassword();
-//
-//		if (StringUtils.isEmpty(mobile)) {
-//			return Result.error(CodeMsg.MOBILE_EMPTY);
-//		}
-//
-//		if (StringUtils.isEmpty(password)) {
-//			return Result.error(CodeMsg.PASSWORD_EMPTY);
-//		}
-//		
-//		if(!ValidatorUtil.isMobile(mobile)) {
-//			
-//			return Result.error(CodeMsg.MOBILE_ERROR);
-//		}
+		miaoshaUserService.login(loginVo);
+		return Result.success(true);
 
-		CodeMsg cm = miaoshaUserService.login(loginVo);
-		if(cm.getCode() == 0) {
-			return Result.success(true);
-		}else {
-			return Result.error(cm);
-		}
-		
 	}
 }
