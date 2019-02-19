@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.flysun.miaosha.dao.MiaoshaUserDao;
 import com.flysun.miaosha.domain.MiaoshaUser;
+import com.flysun.miaosha.exception.GlobalException;
 import com.flysun.miaosha.redis.RedisService;
 import com.flysun.miaosha.result.CodeMsg;
 import com.flysun.miaosha.util.MD5Util;
@@ -39,17 +40,18 @@ public class MiaoshaUserService {
 	 * @return void    返回类型  
 	 * @throws  
 	 */  
-	public CodeMsg login(LoginVo loginVo) {
+	public boolean login(LoginVo loginVo) {
 		// TODO Auto-generated method stub
 		if(loginVo == null) {
-			return CodeMsg.SERVER_ERROR;
+			throw new GlobalException(CodeMsg.SERVER_ERROR);
 		}
 		String mobile = loginVo.getMobile();
 		String formPass = loginVo.getPassword();//一次MD5密码
 		//判断手机号是否存在
 		MiaoshaUser miaoshaUser =getById(Long.parseLong(mobile));
 		if(miaoshaUser == null) {
-			return CodeMsg.MOBILE_NOT_EXIST;
+			//return CodeMsg.MOBILE_NOT_EXIST;
+			throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
 		}
 		String dbPass = miaoshaUser.getPassword();//两次MD5密码
 		String saltDB = miaoshaUser.getSalt();//服务端 salt
@@ -57,9 +59,10 @@ public class MiaoshaUserService {
 		String calcPass = MD5Util.formPassToDBPass(formPass, saltDB);
 		//验证密码
 		if(!calcPass.equals(dbPass)) {
-			return CodeMsg.PASSWORD_ERROR;
+			//return CodeMsg.PASSWORD_ERROR;
+			throw new GlobalException(CodeMsg.PASSWORD_ERROR);
 		}
-		return CodeMsg.SUCCESS;
+		return true;
 		
 		
 	}
