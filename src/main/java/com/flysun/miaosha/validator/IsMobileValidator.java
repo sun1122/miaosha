@@ -10,7 +10,7 @@ import com.flysun.miaosha.util.ValidatorUtil;
 
 /**
  * @ClassName: IsMobileValidator
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: TODO(jsr303自定义注解校验器)
  * @author 周家申
  * @date 2019年2月12日
  * 
