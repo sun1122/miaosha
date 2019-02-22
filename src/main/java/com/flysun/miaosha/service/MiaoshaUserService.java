@@ -32,18 +32,21 @@ public class MiaoshaUserService {
 		return miaoshaUserDao.getById(id);
 	}
 
-	public MiaoshaUser getByToken(String token) {
+	public MiaoshaUser getByToken(HttpServletResponse response, String token) {
 		if (StringUtils.isEmpty(token)) {
 			return null;
 		}
 		MiaoshaUser user = redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
-		
+		// 延长有效期
+		if (user != null) {
+			addCookie(response, token, user);
+		}
 		return user;
 	}
 
 	/**
 	 * @Title: login @Description: TODO(登陆接口) @param @param loginVo 参数 @return void
-	 * 返回类型 @throws
+	 *         返回类型 @throws
 	 */
 	public boolean login(HttpServletResponse response, LoginVo loginVo) {
 		// TODO Auto-generated method stub
@@ -69,14 +72,24 @@ public class MiaoshaUserService {
 		}
 		// 生成 uuid
 		String token = UUIDUtil.uuid();
-		// 存入redis
-		redisService.set(MiaoshaUserKey.token, token, miaoshaUser);
 		// 生成cookie
+		addCookie(response, token, miaoshaUser);
+		return true;
+
+	}
+
+	/**
+	 * @Title: addCookie @Description: TODO(生成cookie) @param @param
+	 *         response @param @param token @param @param user 参数 @return void
+	 *         返回类型 @throws
+	 */
+	private void addCookie(HttpServletResponse response, String token, MiaoshaUser user) {
+		//存入redis
+		redisService.set(MiaoshaUserKey.token, token, user);
 		Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
 		cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
 		cookie.setPath("/");
 		response.addCookie(cookie);
-		return true;
 
 	}
 
