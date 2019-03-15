@@ -18,4 +18,13 @@ public class GoodsService {
 		return goodsDao.listGoodsVo();
 	}
 
+	/**
+	 * 
+	 * @param goodsId
+	 * @return 返回商品信息
+	 */
+	public GoodsVo getGoodsVoByGoodsId(long goodsId) {
+		return goodsDao.getGoodsVoByGoodsId(goodsId);
+	}
+
 }
