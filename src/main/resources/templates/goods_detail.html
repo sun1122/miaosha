@@ -76,11 +76,10 @@ function countDown(){
 	var timeout;
 	if(remainSeconds > 0){//秒杀还没开始，倒计时
 		$("#buyButton").attr("disabled", true);
-	    //页面倒计时
 		timeout = setTimeout(function(){
 			$("#countDown").text(remainSeconds - 1);
 			$("#remainSeconds").val(remainSeconds - 1);
-			countDown();//方法回调
+			countDown();
 		},1000);
 	}else if(remainSeconds == 0){//秒杀进行中
 		$("#buyButton").attr("disabled", false);
